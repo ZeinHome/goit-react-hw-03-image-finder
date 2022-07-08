@@ -12,17 +12,7 @@ import {
 class Searchbar extends Component {
   state = {
     imageName: '',
-    pages: 1,
   };
-
-  componentDidUpdate(_, prevState) {
-    if (
-      this.state.imageName !== this.prevState ||
-      this.state.pages !== this.prevState
-    ) {
-      console.log(12);
-    }
-  }
 
   handelImageChange = e => {
     this.setState({ imageName: e.currentTarget.value.toLowerCase() });
@@ -36,7 +26,7 @@ class Searchbar extends Component {
       return;
     }
     this.props.onSubmit(this.state.imageName);
-    this.setState({ imageName: '', pages: 1 });
+    this.setState({ imageName: '' });
   };
 
   render() {
