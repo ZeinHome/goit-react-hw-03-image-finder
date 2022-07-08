@@ -12,3 +12,9 @@ export const ImageGalleryContainer = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
+
+export const Container = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+`;

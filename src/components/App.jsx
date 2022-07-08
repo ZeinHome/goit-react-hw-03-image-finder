@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Box } from './App.styled';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
-import Button from './Button/Button';
 
 export class App extends Component {
   state = {
@@ -20,7 +19,7 @@ export class App extends Component {
       <Box>
         <Searchbar onSubmit={this.handelSubmitForm} />
         <ImageGallery imageName={this.state.imageName} />
-        {this.state.imageName && <Button />}
+
         <ToastContainer />
       </Box>
     );

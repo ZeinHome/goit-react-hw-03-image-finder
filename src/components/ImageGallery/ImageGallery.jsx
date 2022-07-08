@@ -1,13 +1,12 @@
 import { Component } from 'react';
 import axios from 'axios';
-import { ImageGalleryContainer } from './ImageGallery.styled';
+import { ImageGalleryContainer, Container } from './ImageGallery.styled';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-
+import Button from '../Button/Button';
 class ImageGallery extends Component {
   state = {
     imagesArray: [],
   };
-  // &q=yellow+flowers
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.imageName !== this.props.imageName) {
@@ -20,14 +19,15 @@ class ImageGallery extends Component {
         });
     }
   }
+
   render() {
-    console.log(this.state.imagesArray);
     return (
-      <div>
+      <Container>
         <ImageGalleryContainer>
           <ImageGalleryItem imagesArray={this.state.imagesArray} />
         </ImageGalleryContainer>
-      </div>
+        {this.state.imagesArray.length !== 0 && <Button />}
+      </Container>
     );
   }
 }
