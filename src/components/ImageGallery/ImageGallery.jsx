@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import axios from 'axios';
 import { ImageGalleryContainer, Container } from './ImageGallery.styled';
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
+import ImageGalleryItems from '../ImageGalleryItems/ImageGalleryItems ';
 import Button from '../Button/Button';
 import Loader from '../Loader/Loader';
 import Modal from '../Modal/Modal';
+import fetchImages from '../Services/Services';
 
 class ImageGallery extends Component {
   state = {
@@ -12,36 +12,30 @@ class ImageGallery extends Component {
     pages: 1,
     isloading: false,
     showModal: false,
-    activIndex: null,
+    largeImageURL: null,
+    tags: null,
   };
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.imageName !== this.props.imageName) {
       this.setState(prevState => ({ isloading: true }));
+      const ImagesDate = fetchImages(this.props.imageName, this.state.pages);
 
-      axios
-        .get(
-          `https://pixabay.com/api/?key=28498963-d14ed543a0b98f000b6c864a2&q=${this.props.imageName}&image_type=photo&page=${this.state.pages}&per_page=12`
-        )
-        .then(res => {
-          return this.setState({ imagesArray: res.data.hits, pages: 1 });
-        })
-        .finally(this.setState(prevState => ({ isloading: false })));
+      ImagesDate.then(res => {
+        return this.setState({ imagesArray: res.hits, pages: 1 });
+      }).finally(this.setState(prevState => ({ isloading: false })));
     }
 
     if (this.state.pages !== prevState.pages) {
       this.setState(prevState => ({ isloading: true }));
 
-      axios
-        .get(
-          `https://pixabay.com/api/?key=28498963-d14ed543a0b98f000b6c864a2&q=${this.props.imageName}&image_type=photo&page=${this.state.pages}&per_page=12`
-        )
-        .then(res => {
-          return this.setState(prevState => ({
-            imagesArray: [...this.state.imagesArray, ...res.data.hits],
-          }));
-        })
-        .finally(this.setState(prevState => ({ isloading: false })));
+      const ImagesDate = fetchImages(this.props.imageName, this.state.pages);
+
+      ImagesDate.then(res => {
+        return this.setState(prevState => ({
+          imagesArray: [...this.state.imagesArray, ...res.hits],
+        }));
+      }).finally(this.setState(prevState => ({ isloading: false })));
     }
   }
 
@@ -55,9 +49,10 @@ class ImageGallery extends Component {
     this.setState(prevState => ({ showModal: !prevState.showModal }));
   };
 
-  handleImageClick = index => {
+  handleImageClick = ({ largeImageURL, tags }) => {
     this.toggleModal();
-    return this.setState({ activIndex: this.state.imagesArray[index] });
+
+    return this.setState({ largeImageURL: largeImageURL, tags: tags });
   };
 
   render() {
@@ -65,16 +60,13 @@ class ImageGallery extends Component {
       <Container>
         {this.state.isloading && <Loader />}
         <ImageGalleryContainer>
-          <ImageGalleryItem
+          <ImageGalleryItems
             imagesArray={this.state.imagesArray}
             onImageClick={this.handleImageClick}
           />
           {this.state.showModal && (
             <Modal onCloseModal={this.toggleModal}>
-              <img
-                src={this.state.activIndex.largeImageURL}
-                alt={this.state.activIndex.tags}
-              />
+              <img src={this.state.largeImageURL} alt={this.state.tags} />
             </Modal>
           )}
         </ImageGalleryContainer>

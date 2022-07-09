@@ -4,13 +4,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Box } from './App.styled';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
-// import { Modal } from './Modal/Modal.styled';
 
 export class App extends Component {
   state = {
     imageName: '',
-    // showModal: false,
-    // activIndex: null,
   };
 
   handelSubmitForm = image => {
@@ -22,11 +19,6 @@ export class App extends Component {
       <Box>
         <Searchbar onSubmit={this.handelSubmitForm} />
         <ImageGallery imageName={this.state.imageName} />
-        {/* {this.state.showModal && (
-          <Modal onCloseModal={this.toggleModal}>
-            <img src={activIndex.largeImageURL} alt={activIndex.tags} />
-          </Modal>
-        )} */}
         <ToastContainer />
       </Box>
     );
